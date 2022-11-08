@@ -42,13 +42,48 @@ router.post("/create", async function (req, res) {
     });
 
     if (req.body.type === "BUY") {
-        wallet.balance -= stockPrice * req.body.quantity;
+      wallet.balance -= stockPrice * req.body.quantity;
     } else {
-        wallet.balance += stockPrice * req.body.quantity;
+      wallet.balance += stockPrice * req.body.quantity;
+    }
+
+    const history = await axios
+      .patch("http://localhost:8012/history/addtoHistory", {
+        h_id: user.history,
+        orderId: order._id,
+      })
+      .then((result) => {
+        return result.data;
+      });
+    let portfolio;
+    if (req.body.type === "BUY") {
+      portfolio = await axios
+        .patch("http://localhost:8012/portfolio/update", {
+          p_id: user.portfolio,
+          type: "BUY",
+          quantity: order.quantity,
+          price: stockPrice,
+          company: order.stock,
+        })
+        .then((result) => {
+          return result.data;
+        });
+    } else {
+      portfolio = await axios
+        .patch("http://localhost:8012/portfolio/update", {
+          p_id: user.portfolio,
+          type: "SELL",
+          quantity: req.body.quantity,
+          price: req.body.boughtAt,
+          company: req.body.company,
+        })
+        .then((result) => {
+          return result.data;
+        });
     }
 
     await wallet.save();
-    res.status(201).json(order);
+    res.status(201).json({ order, portfolio, history, wallet });
   } catch (err) {
     res.status(err.status || 500).json({
       success: false,

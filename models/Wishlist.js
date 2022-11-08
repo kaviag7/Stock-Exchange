@@ -8,12 +8,7 @@ const wishList = new Schema(
       ref: "User",
       required: true,
     },
-    stocks: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Stock",
-      },
-    ],
+    stocks: [String],
   },
   {
     timestamps: true,
