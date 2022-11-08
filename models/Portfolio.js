@@ -7,24 +7,9 @@ const portfolio = new Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 		},
-        stocks: [{
-            stock_id: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Stock",
-            },
-            amount_invested: Number,
-            return: Number,
-            net_quantity: {
-                type: Number,
-                min: 0,
-            },
-            bought_at:[{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Order"
-            }]
-        }],
-        total_present_value: Number,
+        stocks: {},
         amount_invested: Number,
+        quantity: Number
 	},
 	{
 		timestamps: true,
