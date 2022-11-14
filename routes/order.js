@@ -74,8 +74,7 @@ router.post("/create", async function (req, res) {
           p_id: user.portfolio,
           type: "SELL",
           quantity: req.body.quantity,
-          price: req.body.boughtAt,
-          company: req.body.company,
+          stock_id: req.body.stock_id,
         })
         .then((result) => {
           return result.data;
